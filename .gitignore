@@ -1,15 +1,38 @@
 # Learn more https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
 
-# dependencies
+# ============================================
+# Dependencies
+# ============================================
 node_modules/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
 
-# Expo
+# ============================================
+# Environment Variables (CRITICAL - NEVER COMMIT)
+# ============================================
+.env
+.env.local
+.env.*.local
+.env.development.local
+.env.staging.local
+.env.production.local
+.env.test.local
+
+# ============================================
+# Expo & Build
+# ============================================
 .expo/
+.expo-shared/
 dist/
+build/
 web-build/
 expo-env.d.ts
+eas.json.local
 
-# Native
+# ============================================
+# Native Build Files
+# ============================================
 .kotlin/
 *.orig.*
 *.jks
@@ -17,23 +40,99 @@ expo-env.d.ts
 *.p12
 *.key
 *.mobileprovision
+*.keystore
+ios/Pods/
+ios/Podfile.lock
+android/.gradle/
+android/build/
+android/local.properties
+.gradle/
 
-# Metro
+# ============================================
+# Metro Bundler
+# ============================================
 .metro-health-check*
+.metro-bundler-cache/
 
-# debug
+# ============================================
+# Debug & Logs
+# ============================================
 npm-debug.*
 yarn-debug.*
 yarn-error.*
+*.log
+logs/
+lerna-debug.log
+pnpm-debug.log
 
-# macOS
+# ============================================
+# IDE & Editor Configuration
+# ============================================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+*.iml
 .DS_Store
+.AppleDouble
+.LSOverride
+*.sublime-workspace
+*.sublime-project
+.project
+.classpath
+.c9/
+.netrc
+.eslintignore
+
+# ============================================
+# Testing
+# ============================================
+coverage/
+.jest_cache/
+.nyc_output/
+dist/coverage
+
+# ============================================
+# OS Files
+# ============================================
+Thumbs.db
+Desktop.ini
+.DS_Store
+.AppleDouble
+.LSOverride
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+
+# ============================================
+# Example/Template Files
+# ============================================
+app-example/
+
+# ============================================
+# Cache & Temporary Files
+# ============================================
+.cache/
+*.cache
+.next/
+out/
+.turbo/
+dist/
+build/
+
+# ============================================
+# Bundle Analyzer
+# ============================================
+.bundle-report.html
+dist/bundle-report.json
+
+# ============================================
+# Misc
+# ============================================
 *.pem
-
-# local env files
-.env*.local
-
-# typescript
-*.tsbuildinfo
-
-app-example
+*.pem.local
+.env.*.pem
+.env*.pem
+.vscode-server/
+.history/
