@@ -1,5 +1,5 @@
 import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import { Platform, StyleSheet, TouchableOpacity } from 'react-native';
 
 import { Collapsible } from '@/components/Collapsible';
 import { ExternalLink } from '@/components/ExternalLink';
@@ -7,8 +7,19 @@ import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { IconSymbol } from '@/components/ui/IconSymbol';
+import { useAuthStore } from '@/store/auth-store';
+import { useRouter } from 'expo-router';
+import { useThemeColor } from '@/hooks/useThemeColor';
 
 export default function TabTwoScreen() {
+  const { logout } = useAuthStore();
+  const router = useRouter();
+  const tintColor = useThemeColor({}, 'tint');
+
+  const handleLogout = async () => {
+    await logout();
+    router.replace('/login');
+  };
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
@@ -92,6 +103,17 @@ export default function TabTwoScreen() {
           ),
         })}
       </Collapsible>
+
+      <ThemedView style={styles.logoutContainer}>
+        <TouchableOpacity 
+          style={[styles.logoutButton, { backgroundColor: tintColor }]}
+          onPress={handleLogout}
+        >
+          <ThemedText style={[styles.logoutButtonText, { color: '#fff' }]}>
+            Log Out
+          </ThemedText>
+        </TouchableOpacity>
+      </ThemedView>
     </ParallaxScrollView>
   );
 }
@@ -106,5 +128,19 @@ const styles = StyleSheet.create({
   titleContainer: {
     flexDirection: 'row',
     gap: 8,
+  },
+  logoutContainer: {
+    marginTop: 24,
+    marginBottom: 24,
+  },
+  logoutButton: {
+    borderRadius: 8,
+    paddingVertical: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  logoutButtonText: {
+    fontSize: 16,
+    fontWeight: '600',
   },
 });
