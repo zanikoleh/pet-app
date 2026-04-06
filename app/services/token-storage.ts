@@ -5,13 +5,22 @@
  */
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Platform } from 'react-native';
 import * as Keychain from 'react-native-keychain';
 import { AuthTokens } from '../types/models';
 
 const TOKEN_STORAGE_KEY = 'pet-app-auth-tokens';
-const USE_KEYCHAIN = true;
 
 class TokenStorage {
+  /**
+   * Determine if we should use native Keychain
+   * Keychain is not supported in web/browser environments
+   */
+  private shouldUseKeychain(): boolean {
+    // Only use Keychain on native platforms
+    return Platform.OS === 'ios' || Platform.OS === 'android';
+  }
+
   /**
    * Save tokens securely
    */
@@ -19,14 +28,14 @@ class TokenStorage {
     try {
       const tokenJson = JSON.stringify(tokens);
 
-      if (USE_KEYCHAIN) {
+      if (this.shouldUseKeychain()) {
         try {
           await Keychain.setGenericPassword(
             TOKEN_STORAGE_KEY,
             tokenJson,
             {
               service: 'pet-app',
-              storage: Keychain.STORAGE_TYPE.AES,
+              storage: Keychain.STORAGE_TYPE.AES_GCM_NO_AUTH,
             }
           );
         } catch (error) {
@@ -50,11 +59,10 @@ class TokenStorage {
     try {
       let tokenJson: string | null = null;
 
-      if (USE_KEYCHAIN) {
+      if (this.shouldUseKeychain()) {
         try {
           const credentials = await Keychain.getGenericPassword({
             service: 'pet-app',
-            storage: Keychain.STORAGE_TYPE.AES,
           });
 
           if (credentials && credentials.password) {
@@ -86,11 +94,10 @@ class TokenStorage {
    */
   async clearTokens(): Promise<void> {
     try {
-      if (USE_KEYCHAIN) {
+      if (this.shouldUseKeychain()) {
         try {
           await Keychain.resetGenericPassword({
             service: 'pet-app',
-            storage: Keychain.STORAGE_TYPE.AES,
           });
         } catch (error) {
           // Fallback to AsyncStorage if Keychain fails
