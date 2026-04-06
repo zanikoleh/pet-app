@@ -1,75 +1,110 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
-
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
+import { useThemeColor } from '@/hooks/useThemeColor';
+import { useAuthStore } from '@/store/auth-store';
+import { usePets } from '@/store/pet-store';
+import { ActivityIndicator, FlatList, StyleSheet, View } from 'react-native';
 
-export default function HomeScreen() {
+export default function PetsScreen() {
+  const { user } = useAuthStore();
+  const { data: pets, isLoading, error } = usePets();
+  const backgroundColor = useThemeColor({}, 'background');
+  const tintColor = useThemeColor({}, 'tint');
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
+    <ThemedView style={[styles.container, { backgroundColor }]}>
+      <View style={styles.header}>
+        <ThemedText type="title">My Pets</ThemedText>
+        <ThemedText style={styles.subtitle}>Welcome, {user?.fullName || 'User'}!</ThemedText>
+      </View>
+
+      {isLoading ? (
+        <View style={styles.centerContainer}>
+          <ActivityIndicator size="large" color={tintColor} />
+        </View>
+      ) : error ? (
+        <View style={styles.centerContainer}>
+          <ThemedText style={styles.errorText}>Failed to load pets</ThemedText>
+        </View>
+      ) : pets && pets.length > 0 ? (
+        <FlatList
+          data={pets}
+          keyExtractor={(item) => item.id}
+          scrollEnabled={false}
+          renderItem={({ item }) => (
+            <ThemedView style={[styles.petCard, { borderColor: tintColor }]}>
+              <ThemedText type="defaultSemiBold" style={styles.petName}>
+                {item.name}
+              </ThemedText>
+              <ThemedText style={styles.petInfo}>Breed: {item.breed}</ThemedText>
+              <ThemedText style={styles.petInfo}>Age: {item.age} years old</ThemedText>
+            </ThemedView>
+          )}
+          contentContainerStyle={styles.listContent}
         />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+      ) : (
+        <View style={styles.emptyContainer}>
+          <ThemedText style={styles.emptyText}>No pets yet</ThemedText>
+          <ThemedText style={styles.emptySubtext}>Add your first pet to get started</ThemedText>
+        </View>
+      )}
+    </ThemedView>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
+  container: {
+    flex: 1,
   },
-  stepContainer: {
-    gap: 8,
+  header: {
+    paddingHorizontal: 16,
+    paddingTop: 16,
+    paddingBottom: 8,
+  },
+  subtitle: {
+    marginTop: 4,
+    opacity: 0.6,
+  },
+  centerContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  listContent: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+  },
+  petCard: {
+    borderRadius: 8,
+    borderWidth: 1,
+    padding: 16,
+    marginVertical: 8,
+  },
+  petName: {
+    fontSize: 18,
     marginBottom: 8,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  petInfo: {
+    fontSize: 14,
+    marginBottom: 4,
+    opacity: 0.7,
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  emptyText: {
+    fontSize: 18,
+    fontWeight: '600',
+    marginBottom: 8,
+  },
+  emptySubtext: {
+    fontSize: 14,
+    opacity: 0.6,
+  },
+  errorText: {
+    fontSize: 16,
+    color: '#FF6B6B',
   },
 });
