@@ -8,7 +8,7 @@ import { ActivityIndicator, View } from 'react-native';
 import 'react-native-reanimated';
 
 import { useColorScheme } from '@/hooks/useColorScheme';
-import { useAuthStore } from './store/auth-store';
+import { useAuthStore } from '@/store/auth-store';
 
 const queryClient = new QueryClient();
 

@@ -4,8 +4,8 @@
  * Uses native Fetch API instead of axios
  */
 
-import * as models from '../types/models';
-import { tokenStorage } from './token-storage';
+import { tokenStorage } from '@/services/token-storage';
+import * as models from '@/types/models';
 
 const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL || 'http://localhost:44300';
 const API_TIMEOUT = parseInt(process.env.EXPO_PUBLIC_API_TIMEOUT || '30000', 10);

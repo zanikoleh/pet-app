@@ -8,7 +8,7 @@ import {
     LoginRequest,
     Pet,
     User,
-} from '../types/models';
+} from '@/types/models';
 
 describe('TypeScript Models', () => {
   describe('User model', () => {

@@ -3,7 +3,7 @@
  * Tests auth interceptors, token refresh, error handling, and all API endpoints
  */
 
-import * as models from '../../types/models';
+import * as models from '@/types/models';
 
 // Mock modules BEFORE importing the actual module
 jest.mock('react-native', () => ({
@@ -26,8 +26,8 @@ jest.mock('react-native-keychain', () => ({
 }));
 
 // NOW import the modules
-import { apiClient } from '../api-client';
-import { tokenStorage } from '../token-storage';
+import { apiClient } from '@/services/api-client';
+import { tokenStorage } from '@/services/token-storage';
 
 // Mock fetch globally
 global.fetch = jest.fn();

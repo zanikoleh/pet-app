@@ -4,10 +4,10 @@
  * Falls back to AsyncStorage for web development
  */
 
+import { AuthTokens } from '@/types/models';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
 import * as Keychain from 'react-native-keychain';
-import { AuthTokens } from '../types/models';
 
 const TOKEN_STORAGE_KEY = 'pet-app-auth-tokens';
 

@@ -3,10 +3,10 @@
  * Manages user authentication state and actions
  */
 
+import { apiClient } from '@/services/api-client';
+import { tokenStorage } from '@/services/token-storage';
+import * as models from '@/types/models';
 import { create } from 'zustand';
-import { apiClient } from '../services/api-client';
-import { tokenStorage } from '../services/token-storage';
-import * as models from '../types/models';
 
 interface AuthStore {
   // State

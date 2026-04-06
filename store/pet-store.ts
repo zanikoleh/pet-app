@@ -3,9 +3,9 @@
  * Manages pet list state and caching
  */
 
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { apiClient } from '../services/api-client';
-import * as models from '../types/models';
+import { apiClient } from '@/services/api-client';
+import * as models from '@/types/models';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 // Query keys
 export const petKeys = {
